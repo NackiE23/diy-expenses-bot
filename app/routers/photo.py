@@ -8,6 +8,12 @@ import app.keyboards as kb
 
 photo_router = Router()
 
+image_path = "images\\"
+images = []
+for path, _, files in os.walk(image_path):
+    for name in files:
+        images.append(os.path.join(path, name))
+
 
 @photo_router.message(F.text == "Random photo")
 async def photo_main(message: Message):
@@ -16,6 +22,4 @@ async def photo_main(message: Message):
 
 @photo_router.message(F.text == "1920x1080")
 async def message_high_res(message: Message):
-    images = os.listdir("images")
-    image = FSInputFile(random.choice(images))
-    await message.answer_photo(image)
+    await message.answer_photo(FSInputFile(random.choice(images)))
