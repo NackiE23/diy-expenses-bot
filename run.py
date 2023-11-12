@@ -10,6 +10,8 @@ from aiogram.types import Message, BotCommand
 
 from app.database.models import async_main
 from app.handlers import router
+from app.routers.auth import auth_router
+from app.routers.expenses import expenses_router
 from app.routers.photo import photo_router
 from app.routers.weather import weather_router
 from config import TOKEN
@@ -18,7 +20,7 @@ import app.keyboards as kb
 
 
 dp = Dispatcher()
-dp.include_routers(router, weather_router, photo_router)
+dp.include_routers(router, auth_router, expenses_router, weather_router, photo_router)
 
 bot = Bot(token=TOKEN, parse_mode=ParseMode.HTML)
 

@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import List
-from sqlalchemy import Integer, BigInteger, DateTime, String, ForeignKey, func
+from sqlalchemy import Integer, Float, BigInteger, DateTime, String, ForeignKey, func
 from sqlalchemy.orm import relationship, mapped_column, Mapped, DeclarativeBase
 from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_engine
 
@@ -20,8 +20,8 @@ class User(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    tg_id = mapped_column(BigInteger)
-    wealth: Mapped[int] = mapped_column(Integer)
+    tg_id = mapped_column(BigInteger, unique=True)
+    wealth: Mapped[float] = mapped_column(Float, default=0.0)
 
     checks: Mapped[List["Check"]] = relationship(back_populates="user", cascade="all, delete-orphan")
     incomes: Mapped[List["Income"]] = relationship(back_populates="user", cascade="all, delete-orphan")

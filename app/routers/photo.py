@@ -6,12 +6,12 @@ from aiogram import Router, F
 from aiogram.types import Message, FSInputFile, URLInputFile
 
 import app.keyboards as kb
+from config import IMAGES_PATH
 
 photo_router = Router()
 
-image_path = "images\\"
 images = []
-for path, _, files in os.walk(image_path):
+for path, _, files in os.walk(IMAGES_PATH):
     for name in files:
         images.append(os.path.join(path, name))
 

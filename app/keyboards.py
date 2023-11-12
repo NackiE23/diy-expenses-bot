@@ -9,6 +9,18 @@ main = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Random photo")],
 ], resize_keyboard=True, input_field_placeholder="Choose option below")
 
+auth = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text="Registration")],
+], resize_keyboard=True)
+
+expenses = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text="Available sum")],
+
+    [KeyboardButton(text="Add expense"), KeyboardButton(text="Add income")],
+
+    [KeyboardButton(text="Get incomes"), KeyboardButton(text="Get expenses")],
+], resize_keyboard=True)
+
 weather = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Ternopil")],
     [KeyboardButton(text="Lviv")],
