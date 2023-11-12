@@ -4,7 +4,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from app.database.requests import get_users
 
 main = ReplyKeyboardMarkup(keyboard=[
-    [KeyboardButton(text="Get users")],
+    [KeyboardButton(text="Expenses")],
     [KeyboardButton(text="Weather")],
     [KeyboardButton(text="Random photo")],
 ], resize_keyboard=True, input_field_placeholder="Choose option below")
@@ -16,9 +16,8 @@ weather = ReplyKeyboardMarkup(keyboard=[
 ], resize_keyboard=True)
 
 photo = ReplyKeyboardMarkup(keyboard=[
-    [KeyboardButton(text="300x300")],
-    [KeyboardButton(text="900x700")],
-    [KeyboardButton(text="1920x1080")],
+    [KeyboardButton(text="Unsplash")],
+    [KeyboardButton(text="Local")],
 ], resize_keyboard=True)
 
 
