@@ -13,12 +13,29 @@ auth = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Registration")],
 ], resize_keyboard=True)
 
-expenses = ReplyKeyboardMarkup(keyboard=[
+expenses_select_action = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Available sum")],
-
     [KeyboardButton(text="Add expense"), KeyboardButton(text="Add income")],
+    [KeyboardButton(text="Get expenses"), KeyboardButton(text="Get incomes")],
+    [KeyboardButton(text="Exit")],
+], resize_keyboard=True)
 
-    [KeyboardButton(text="Get incomes"), KeyboardButton(text="Get expenses")],
+add_expense = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text="Return")]
+], resize_keyboard=True)
+
+add_income = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text="Return")]
+], resize_keyboard=True)
+
+get_expanses = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text="Get 10")],
+    [KeyboardButton(text="Return")]
+], resize_keyboard=True)
+
+get_incomes = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text="Get 20")],
+    [KeyboardButton(text="Return")]
 ], resize_keyboard=True)
 
 weather = ReplyKeyboardMarkup(keyboard=[

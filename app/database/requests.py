@@ -9,6 +9,12 @@ async def get_users():
         return users
 
 
+async def get_incomes(offset: int, limit: int):
+    async with async_session() as session:
+        incomes = await session.scalars(select(Income).offset(offset).limit(limit).order_by(Income.datetime))
+        return incomes
+
+
 async def get_user_by_tg_id(user_tg_id):
     async with async_session() as session:
         user = await session.scalar(select(User).where(User.tg_id == user_tg_id))
