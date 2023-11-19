@@ -3,12 +3,14 @@ import random
 
 import aiohttp
 from aiogram import Router, F
-from aiogram.types import Message, FSInputFile, URLInputFile
+from aiogram.types import Message, FSInputFile, URLInputFile, BufferedInputFile
 
 import app.keyboards as kb
+from app.utils.google_drive_api import get_random_google_drive_image
 from config import IMAGES_PATH
 
 photo_router = Router()
+google_drive_image = False
 
 images = []
 for path, _, files in os.walk(IMAGES_PATH):
@@ -34,3 +36,22 @@ async def message_middle_res(message: Message):
                 await message.answer_photo(URLInputFile(response.headers.get("Location")))
             else:
                 await message.answer_photo(FSInputFile(random.choice(images)))
+
+
+@photo_router.message(F.text == "Google Drive")
+async def message_random_google_drive_photo(message: Message):
+    global google_drive_image
+
+    if google_drive_image:
+        await message.answer("Already in use")
+    else:
+        google_drive_image = True
+        await message.answer("This can take an approximately 30 seconds")
+        try:
+            for _ in range(5):
+                random_image = get_random_google_drive_image()
+                await message.answer_photo(BufferedInputFile(random_image[0].read(), filename=random_image[1]))
+        except:
+            pass
+        await message.answer("That's all")
+        google_drive_image = False

@@ -46,6 +46,7 @@ weather = ReplyKeyboardMarkup(keyboard=[
 
 photo = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Unsplash")],
+    [KeyboardButton(text="Google Drive")],
     [KeyboardButton(text="Local")],
 ], resize_keyboard=True)
 
