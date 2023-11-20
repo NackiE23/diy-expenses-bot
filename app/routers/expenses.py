@@ -1,10 +1,12 @@
+from datetime import datetime
+
 from aiogram import Router, F
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
 import app.keyboards as kb
+import app.database.requests as rq
 from app.database.models import User
-from app.database.requests import get_user_by_tg_id
 from app.states.expenses import Expenses
 from app.utils import errors, validators
 
@@ -14,7 +16,7 @@ expenses_router = Router()
 @expenses_router.message(F.text == "Expenses")
 @expenses_router.message(Expenses.start)
 async def new_expenses_main(message: Message, state: FSMContext):
-    user = await get_user_by_tg_id(message.from_user.id)
+    user = await rq.get_user_by_tg_id(message.from_user.id)
 
     if user:
         Expenses.user = user
@@ -34,7 +36,7 @@ async def process_action(message: Message, state: FSMContext):
     selected_action = message.text
 
     if selected_action == "Available sum":
-        await available_sum((await state.get_data())['user'], message)
+        await available_sum(message)
 
     elif selected_action == "Add expense":
         await state.set_state(Expenses.add_expense)
@@ -69,7 +71,9 @@ async def process_action(message: Message, state: FSMContext):
         await errors.incorrect_data(message)
 
 
-async def available_sum(user: User, message: Message):
+async def available_sum(message: Message):
+    user = await rq.get_user_by_tg_id(message.from_user.id)
+
     if user:
         await message.answer(f"Available sum: {user.wealth}", reply_markup=kb.expenses_select_action)
     else:
@@ -83,12 +87,24 @@ async def add_expense(message: Message, state: FSMContext):
         await message.answer("Returned", reply_markup=kb.expenses_select_action)
     else:
         validated_data = validators.input_validation(message.text)
+
         if validated_data:
-            await message.answer(f"Expense added: \n"
-                                 f"SUM - {validated_data.get('sum')} \n"
-                                 f"DESCRIPTION - {validated_data.get('description')} \n"
-                                 f"DATETIME - {validated_data.get('datetime')}",
-                                 reply_markup=kb.add_expense)
+            res = await rq.create_expense(
+                tg_id=message.from_user.id,
+                _sum=validated_data.get('sum'),
+                desc=validated_data.get('description'),
+                dt=validated_data.get('datetime')
+            )
+
+            if res:
+                await message.answer(f"Expense added: \n"
+                                     f"ID - {res.id} \n"
+                                     f"SUM - {res.sum} \n"
+                                     f"DESCRIPTION - {res.description} \n"
+                                     f"DATETIME - {res.datetime}",
+                                     reply_markup=kb.add_expense)
+            else:
+                await message.answer(f"Something went wrong!", reply_markup=kb.add_expense)
         else:
             await message.answer(f"{message.text} is incorrect value! Use float type instead",
                                  reply_markup=kb.add_expense)
@@ -101,12 +117,24 @@ async def add_income(message: Message, state: FSMContext):
         await message.answer("Returned", reply_markup=kb.expenses_select_action)
     else:
         validated_data = validators.input_validation(message.text)
+
         if validated_data:
-            await message.answer(f"Income added: \n"
-                                 f"SUM - {validated_data.get('sum')} \n"
-                                 f"DESCRIPTION - {validated_data.get('description')} \n"
-                                 f"DATETIME - {validated_data.get('datetime')}",
-                                 reply_markup=kb.add_income)
+            res = await rq.create_income(
+                tg_id=message.from_user.id,
+                _sum=validated_data.get('sum'),
+                desc=validated_data.get('description'),
+                dt=validated_data.get('datetime')
+            )
+
+            if res:
+                await message.answer(f"Income added: \n"
+                                     f"ID - {res.id} \n"
+                                     f"SUM - {res.sum} \n"
+                                     f"DESCRIPTION - {res.description} \n"
+                                     f"DATETIME - {res.datetime}",
+                                     reply_markup=kb.add_income)
+            else:
+                await message.answer(f"Something went wrong!", reply_markup=kb.add_income)
         else:
             await message.answer(f"{message.text} is incorrect value! Use float type instead",
                                  reply_markup=kb.add_income)

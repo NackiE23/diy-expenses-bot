@@ -31,9 +31,9 @@ class Check(Base):
     __tablename__ = "checks"
     
     id: Mapped[int] = mapped_column(primary_key=True)
-    datetime = mapped_column(DateTime(timezone=True), server_default=func.now())
+    datetime = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=True)
     sum: Mapped[int] = mapped_column(Integer)
-    description: Mapped[str] = mapped_column(String)
+    description: Mapped[str] = mapped_column(String, nullable=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
     user: Mapped["User"] = relationship(back_populates="checks")
@@ -45,7 +45,7 @@ class CheckItem(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     sum: Mapped[int] = mapped_column(Integer)
-    name: Mapped[str] = mapped_column(String)
+    name: Mapped[str] = mapped_column(String, nullable=True)
     check_id: Mapped[int] = mapped_column(ForeignKey("checks.id"))
 
     check: Mapped["Check"] = relationship(back_populates="items")
@@ -55,9 +55,9 @@ class Income(Base):
     __tablename__ = "incomes"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    datetime = mapped_column(DateTime(timezone=True), server_default=func.now())
+    datetime = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=True)
     sum: Mapped[int] = mapped_column(Integer)
-    description: Mapped[str] = mapped_column(String)
+    description: Mapped[str] = mapped_column(String, nullable=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
     user: Mapped["User"] = relationship(back_populates="incomes")
